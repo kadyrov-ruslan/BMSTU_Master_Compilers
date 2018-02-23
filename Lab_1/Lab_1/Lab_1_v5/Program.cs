@@ -14,6 +14,13 @@ namespace Lab_1_v5
 
             var grammar = new Grammar(param);
 
+            var cycleRules = grammar.GetCycleRules();
+
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("Цепные правила");
+            foreach (var rule in cycleRules)
+                Console.WriteLine(rule);
+
             Console.ReadKey();
         }
     }

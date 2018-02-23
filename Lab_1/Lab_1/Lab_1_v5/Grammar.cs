@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab_1_v5
 {
@@ -54,6 +52,31 @@ namespace Lab_1_v5
             FirstGrammarSymbol = paramStrings[0];
 
             Console.WriteLine($"первый элемент {FirstGrammarSymbol}");
+        }
+
+
+        /// <summary>
+        /// Получение цикличных правил
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetCycleRules()
+        {
+            var cycleRules = new List<string>();
+            var stringSeparators = new [] { " -> " };
+
+            foreach (var rule in Rules)
+            {
+                //Разделяем правило на левую и правую сторону
+                var result = rule.Split(stringSeparators, StringSplitOptions.None);
+
+                //Если правая часть правила равна какому - либо нетерминалу (кроме себя), 
+                //получаем цикличное правило
+                if (NonTerminals.Where(p => p != result[0]).Contains(result[1]))
+                    cycleRules.Add(rule);
+
+            }
+
+            return cycleRules.ToArray();
         }
     }
 }
