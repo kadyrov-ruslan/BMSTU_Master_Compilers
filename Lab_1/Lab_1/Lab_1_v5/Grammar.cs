@@ -12,7 +12,7 @@ namespace Lab_1_v5
 
         public List<string> Rules { get; set; }
 
-        public string FirstGrammarSymbol  { get; set; }
+        public string FirstGrammarSymbol { get; set; }
 
         public Grammar(List<string> paramStrings)
         {
@@ -54,15 +54,89 @@ namespace Lab_1_v5
             Console.WriteLine($"первый элемент {FirstGrammarSymbol}");
         }
 
+        /// <summary>
+        /// Получение результирующих нецикличных правил
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetNonCycleRules()
+        {
+            var stringSeparators = new[] { " -> " };
+
+            var resultNonCycleRules = new List<string>();
+            var nonTermSets = PrepareSets();
+            var initNonCycleRules = Rules.Except(GetCycleRules()).ToList();
+
+            foreach (var nonTermSet in nonTermSets)
+            {
+                var mainNonTerm = nonTermSet.FirstOrDefault();
+                var nonTermNonCycleRules = initNonCycleRules.Where(p => p != mainNonTerm).ToList();
+                for (var i = 0; i < nonTermNonCycleRules.Count; i++)
+                {
+                    var leftPart = nonTermNonCycleRules[i].Split(stringSeparators, StringSplitOptions.None)[0];
+                    var rightPart = string.Empty;
+                    if (nonTermSet.Contains(leftPart))
+                    {
+                        rightPart = nonTermNonCycleRules[i].Split(stringSeparators, StringSplitOptions.None)[1];
+                        resultNonCycleRules.Add(mainNonTerm + " -> " + rightPart);
+                    }
+                }
+            }
+
+            //initNonCycleRules.AddRange(resultNonCycleRules);
+            var result = resultNonCycleRules.Distinct();
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Получение множеств для каждого нетерминала
+        /// </summary>
+        /// <returns></returns>
+        private List<string[]> PrepareSets()
+        {
+            var stringSeparators = new[] { " -> " };
+            var results = new List<string[]>();
+            var cycleRules = GetCycleRules();
+
+            foreach (var nonterminal in NonTerminals)
+            {
+                var nonterminalSet = new List<string>
+                {
+                    nonterminal
+                };
+                var previousNonterminalSet = new List<string>();
+
+                //Получение множества для каждого нетерминала
+                var step = 0;
+                while (!ListsAreEqual(nonterminalSet, previousNonterminalSet))
+                {
+                    previousNonterminalSet.AddRange(nonterminalSet.Except(previousNonterminalSet));
+
+                    //Если в цикличных правилах имеется такое правило, что левая его часть равна текущему нетерминалу,
+                    //то добавляем в множество этого нетерминала правую часть правила
+                    if (cycleRules.Any(x => x.Split(stringSeparators, StringSplitOptions.None)[0] == nonterminalSet[step]))
+                    {
+                        var foundRule = cycleRules.FirstOrDefault(x =>
+                            x.Split(stringSeparators, StringSplitOptions.None)[0] == nonterminalSet[step]);
+
+                        var rightPart = foundRule?.Split(stringSeparators, StringSplitOptions.None)[1];
+
+                        nonterminalSet.Add(rightPart);
+                        step++;
+                    }
+                }
+                results.Add(nonterminalSet.ToArray());
+            }
+            return results;
+        }
 
         /// <summary>
         /// Получение цикличных правил
         /// </summary>
         /// <returns></returns>
-        public string[] GetCycleRules()
+        private string[] GetCycleRules()
         {
             var cycleRules = new List<string>();
-            var stringSeparators = new [] { " -> " };
+            var stringSeparators = new[] { " -> " };
 
             foreach (var rule in Rules)
             {
@@ -73,10 +147,22 @@ namespace Lab_1_v5
                 //получаем цикличное правило
                 if (NonTerminals.Where(p => p != result[0]).Contains(result[1]))
                     cycleRules.Add(rule);
-
             }
 
             return cycleRules.ToArray();
+        }
+
+        private static bool ListsAreEqual(List<string> firstList, List<string> secondList)
+        {
+            if (firstList.Count != secondList.Count)
+                return false;
+
+            for (var i = 0; i < firstList.Count; i++)
+            {
+                if (firstList[i] != secondList[i])
+                    return false;
+            }
+            return true;
         }
     }
 }
