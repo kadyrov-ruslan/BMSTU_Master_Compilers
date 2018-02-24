@@ -60,8 +60,6 @@ namespace Lab_1_v5
         /// <returns></returns>
         public string[] GetNonCycleRules()
         {
-            var stringSeparators = new[] { " -> " };
-
             var resultNonCycleRules = new List<string>();
             var nonTermSets = PrepareSets();
             var initNonCycleRules = Rules.Except(GetCycleRules()).ToList();
@@ -72,11 +70,11 @@ namespace Lab_1_v5
                 var nonTermNonCycleRules = initNonCycleRules.Where(p => p != mainNonTerm).ToList();
                 for (var i = 0; i < nonTermNonCycleRules.Count; i++)
                 {
-                    var leftPart = nonTermNonCycleRules[i].Split(stringSeparators, StringSplitOptions.None)[0];
+                    var leftPart = GetRuleParts(nonTermNonCycleRules[i])[0];
                     var rightPart = string.Empty;
                     if (nonTermSet.Contains(leftPart))
                     {
-                        rightPart = nonTermNonCycleRules[i].Split(stringSeparators, StringSplitOptions.None)[1];
+                        rightPart = GetRuleParts(nonTermNonCycleRules[i])[1];
                         resultNonCycleRules.Add(mainNonTerm + " -> " + rightPart);
                     }
                 }
@@ -88,12 +86,11 @@ namespace Lab_1_v5
         }
 
         /// <summary>
-        /// Получение множеств для каждого нетерминала
+        /// Получение множеств N(i) для каждого нетерминала
         /// </summary>
         /// <returns></returns>
         private List<string[]> PrepareSets()
         {
-            var stringSeparators = new[] { " -> " };
             var results = new List<string[]>();
             var cycleRules = GetCycleRules();
 
@@ -113,12 +110,10 @@ namespace Lab_1_v5
 
                     //Если в цикличных правилах имеется такое правило, что левая его часть равна текущему нетерминалу,
                     //то добавляем в множество этого нетерминала правую часть правила
-                    if (cycleRules.Any(x => x.Split(stringSeparators, StringSplitOptions.None)[0] == nonterminalSet[step]))
+                    if (cycleRules.Any(x => GetRuleParts(x)[0] == nonterminalSet[step]))
                     {
-                        var foundRule = cycleRules.FirstOrDefault(x =>
-                            x.Split(stringSeparators, StringSplitOptions.None)[0] == nonterminalSet[step]);
-
-                        var rightPart = foundRule?.Split(stringSeparators, StringSplitOptions.None)[1];
+                        var foundRule = cycleRules.FirstOrDefault(x =>GetRuleParts(x)[0] == nonterminalSet[step]);
+                        var rightPart = GetRuleParts(foundRule)[1];
 
                         nonterminalSet.Add(rightPart);
                         step++;
@@ -136,12 +131,11 @@ namespace Lab_1_v5
         private string[] GetCycleRules()
         {
             var cycleRules = new List<string>();
-            var stringSeparators = new[] { " -> " };
 
             foreach (var rule in Rules)
             {
                 //Разделяем правило на левую и правую сторону
-                var result = rule.Split(stringSeparators, StringSplitOptions.None);
+                var result = GetRuleParts(rule);
 
                 //Если правая часть правила равна какому - либо нетерминалу (кроме себя), 
                 //получаем цикличное правило
@@ -163,6 +157,13 @@ namespace Lab_1_v5
                     return false;
             }
             return true;
+        }
+
+        private static string[] GetRuleParts(string rule)
+        {
+            var stringSeparators = new[] { " -> " };
+            //Разделяем правило на левую и правую сторону
+            return rule.Split(stringSeparators, StringSplitOptions.None);
         }
     }
 }
