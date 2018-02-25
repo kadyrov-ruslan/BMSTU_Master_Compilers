@@ -1,0 +1,28 @@
+3
+S
+T
+E
+6
+a
+b
+/
+*
++
+-
+15
+E -> (S)
+E -> a
+E -> b
+S -> (S)
+S -> a
+S -> b
+S -> S+T
+S -> S-T
+S -> T*E
+S -> T/E
+T -> (S)
+T -> a
+T -> b
+T -> T*E
+T -> T/E
+S
