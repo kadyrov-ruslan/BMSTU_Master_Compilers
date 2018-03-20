@@ -31,16 +31,13 @@ namespace Lab_1_v5
             //    }
             //}
 
-            //var s = grammar.GetNonCycleRules();
-            //s = s.OrderBy(q => q).ToArray();
+            var s = grammar.GetNonCycleRules();
+            s = s.OrderBy(q => q).ToArray();
             //var cycleRules = grammar.GetCycleRules();
 
-            //Console.WriteLine("------------------------------------");
-            //Console.WriteLine("Цепные правила");
-
-            //Console.WriteLine("------------------------------------");
-            //foreach (var rule in s)
-            //    Console.WriteLine(rule);
+            Console.WriteLine("------------------------------------");
+            foreach (var rule in s)
+                Console.WriteLine(rule);
             var result = FileIoHandler.WriteTxtFile(grammar);
             Console.ReadKey();
         }

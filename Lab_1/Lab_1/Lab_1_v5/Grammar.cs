@@ -64,6 +64,7 @@ namespace Lab_1_v5
             var nonTermSets = PrepareSets();
             var initNonCycleRules = Rules.Except(GetCycleRules()).ToList();
 
+            //Проходим по множествам Ri каждого i-того нетерминала
             foreach (var nonTermSet in nonTermSets)
             {
                 var mainNonTerm = nonTermSet.FirstOrDefault();
