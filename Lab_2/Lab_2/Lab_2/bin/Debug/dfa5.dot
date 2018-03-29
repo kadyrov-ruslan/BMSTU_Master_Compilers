@@ -1,0 +1,35 @@
+// Format this file as a Postscript file with 
+//    dot dfa5.dot -Tps -o out.ps
+
+digraph dfa {
+size="11,8.25";
+rotate=90;
+rankdir=LR;
+n999999 [style=invis];
+n999999 -> n0
+n2 [peripheries=2];
+n3 [peripheries=2];
+n6 [peripheries=2];
+n8 [peripheries=2];
+n9 [peripheries=2];
+n10 [peripheries=2];
+n0 -> n1 [label="sign"];
+n0 -> n2 [label="digit"];
+n1 -> n2 [label="digit"];
+n2 -> n3 [label="digit"];
+n2 -> n4 [label="."];
+n2 -> n5 [label="e"];
+n3 -> n3 [label="digit"];
+n3 -> n4 [label="."];
+n3 -> n5 [label="e"];
+n4 -> n6 [label="digit"];
+n5 -> n7 [label="sign"];
+n5 -> n8 [label="digit"];
+n6 -> n9 [label="digit"];
+n6 -> n5 [label="e"];
+n7 -> n8 [label="digit"];
+n8 -> n10 [label="digit"];
+n9 -> n9 [label="digit"];
+n9 -> n5 [label="e"];
+n10 -> n10 [label="digit"];
+}
