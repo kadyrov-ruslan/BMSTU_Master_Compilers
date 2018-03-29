@@ -26,7 +26,6 @@ namespace Lab_2
 
         // Write an input file for the dot program.  You can find dot at
         // http://www.research.att.com/sw/tools/graphviz/
-
         public void WriteDot(string filename)
         {
             var wr = new StreamWriter(new FileStream(filename, FileMode.Create, FileAccess.Write));

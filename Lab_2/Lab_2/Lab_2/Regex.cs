@@ -8,7 +8,6 @@
     internal class Eps : Regex
     {
         // The resulting nfa0 has form s0s -eps-> s0e
-
         public override Nfa MkNfa(Nfa.NameSource names)
         {
             var s0s = names.next();

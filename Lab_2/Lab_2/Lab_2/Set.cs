@@ -10,11 +10,11 @@ namespace Lab_2
     public class Set<T> : ICollection<T>
     {
         // Only the keys matter; the type bool used for the value is arbitrary
-        private readonly Dictionary<T, bool> dict;
+        private readonly Dictionary<T, bool> _dict;
 
         public Set()
         {
-            dict = new Dictionary<T, bool>();
+            _dict = new Dictionary<T, bool>();
         }
 
         public Set(T x) : this()
@@ -36,30 +36,30 @@ namespace Lab_2
 
         public bool Contains(T x)
         {
-            return dict.ContainsKey(x);
+            return _dict.ContainsKey(x);
         }
 
         public void Add(T x)
         {
             if (!Contains(x))
-                dict.Add(x, false);
+                _dict.Add(x, false);
         }
 
         public bool Remove(T x)
         {
-            return dict.Remove(x);
+            return _dict.Remove(x);
         }
 
         public void Clear()
         {
-            dict.Clear();
+            _dict.Clear();
         }
 
         public bool IsReadOnly => false;
 
         public IEnumerator<T> GetEnumerator()
         {
-            return dict.Keys.GetEnumerator();
+            return _dict.Keys.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -67,11 +67,11 @@ namespace Lab_2
             return GetEnumerator();
         }
 
-        public int Count => dict.Count;
+        public int Count => _dict.Count;
 
         public void CopyTo(T[] arr, int i)
         {
-            dict.Keys.CopyTo(arr, i);
+            _dict.Keys.CopyTo(arr, i);
         }
 
         // Is this set a subset of that?
