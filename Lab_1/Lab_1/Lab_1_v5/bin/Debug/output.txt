@@ -1,28 +1,21 @@
 3
-S
-T
 E
-6
+T
+F
+5
 a
-b
-/
+(
+)
 *
 +
--
-15
-E -> (S)
+9
+E -> (E)
 E -> a
-E -> b
-S -> (S)
-S -> a
-S -> b
-S -> S+T
-S -> S-T
-S -> T*E
-S -> T/E
-T -> (S)
+E -> E + T
+E -> T*F
+F -> (E)
+F -> a
+T -> (E)
 T -> a
-T -> b
-T -> T*E
-T -> T/E
-S
+T -> T*F
+F
